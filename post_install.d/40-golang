@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# The return value of a pipeline is the status of
+# the last command to exit with a non-zero status,
+# or zero if no command exited with a non-zero status
+set -o pipefail
+set -o nounset # Treat unset variables as an error when substituting.
+set -o errexit # Exit immediately if a command exits with a non-zero status.
+
+DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
+source "${DIR}/must_be_run_as_root"
+
+echo -e "${GREEN}$(figlet "Golang")${ENDCOLOR}"
+
+GO_VERSION=$(curl -fsSL "https://go.dev/VERSION?m=text")
+GO_ARCHI=$(dpkg --print-architecture)
+GO_TARGZ=$(mktemp)
+
+echo -e "${YELLOW}Installing $GO_VERSION...${ENDCOLOR}"
+curl -fsSL -o "${GO_TARGZ}" "https://go.dev/dl/${GO_VERSION}.linux-${GO_ARCHI}.tar.gz"
+rm -rf /usr/local/go && tar -C /usr/local -xzf "${GO_TARGZ}" && rm "${GO_TARGZ}"
+echo "export PATH=\$PATH:/usr/local/go/bin" > /etc/profile.d/golang
+source /etc/profile.d/golang
+echo -e "${CYAN}$(go version)${ENDCOLOR}"
+echo -e "${YELLOW}${GO_VERSION} installed.${ENDCOLOR}"

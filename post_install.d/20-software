@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# The return value of a pipeline is the status of
+# the last command to exit with a non-zero status,
+# or zero if no command exited with a non-zero status
+set -o pipefail
+set -o nounset # Treat unset variables as an error when substituting.
+set -o errexit # Exit immediately if a command exits with a non-zero status.
+
+DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
+source "${DIR}/must_be_run_as_root"
+source "${DIR}/add_apt_source"
+
+echo -e "${GREEN}$(figlet "Software")${ENDCOLOR}"
+
+add_apt_source "google-chrome" \
+               "https://dl-ssl.google.com/linux/linux_signing_key.pub" \
+               "deb [arch=$(dpkg --print-architecture)] http://dl.google.com/linux/chrome/deb/ stable main"
+
+echo -e "${YELLOW}Installing software...${ENDCOLOR}"
+apt install -y snapd google-chrome-stable
+echo
+snap install core 
+snap install firefox 
+snap install bitwarden 
+snap install discord 
+snap install --classic phpstorm 
+snap install --classic pycharm-professional
+snap install --channel=edge shellcheck
+snap install --classic clion 
+snap install --classic goland 
+snap install --classic datagrip 
+snap install postman 
+snap install vlc 
+snap install slack 
+snap install skype 
+snap install mattermost-desktop 
+snap install discord 
+snap install whatsdesk 
+snap install thunderbird
+echo
+snap list
+echo -e "${YELLOW}Software installed.${ENDCOLOR}"
