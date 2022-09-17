@@ -10,12 +10,12 @@ set -o errexit # Exit immediately if a command exits with a non-zero status.
 DIR=$(dirname "$0")
 source "$DIR/must_be_run_as_root"
 
-echo -e "${GREEN}$(figlet "Yubikey")${ENDCOLOR}"
+echo -e "${BIGREEN}$(figlet "Yubikey")${NC}"
 
-echo -e "${YELLOW}Installing YubiKey tools...${ENDCOLOR}"
+echo -e "${BIYELLOW}Installing YubiKey tools...${NC}"
 apt -y install wget gnupg2 gnupg-agent dirmngr cryptsetup scdaemon pcscd \
                secure-delete hopenpgp-tools yubikey-personalization \
                python3-pip python3-pyscard
 pip3 install PyOpenSSL yubikey-manager
 service pcscd start
-echo -e "${YELLOW}YubiKey tools installed.${ENDCOLOR}"
+echo -e "${BIYELLOW}YubiKey tools installed.${NC}"
