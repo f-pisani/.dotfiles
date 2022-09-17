@@ -1,0 +1,17 @@
+[user]
+        name =
+        email =
+        signingkey =
+[commit]
+        gpgsign = true
+[core]
+        excludesfile = ~/.gitignore
+        editor = vim
+[init]
+        defaultBranch = main
+[pull]
+        rebase = false
+[tag]
+        gpgSign = true
+[push]
+        gpgSign = if-asked
