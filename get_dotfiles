@@ -25,4 +25,4 @@ if [ ! -d "${DOTFILES_DIR}" ]; then
     chown -R "${SUDO_USER}":"${SUDO_USER}" "${DOTFILES_DIR}"
 fi
 
-. "${DOTFILES_DIR}/install"
+bash "${DOTFILES_DIR}/install"
