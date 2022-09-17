@@ -11,13 +11,13 @@ DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
 source "${DIR}/must_be_run_as_root"
 source "${DIR}/add_apt_source"
 
-echo -e "${GREEN}$(figlet "Docker")${ENDCOLOR}"
+echo -e "${BIGREEN}$(figlet "Docker")${NC}"
 
 add_apt_source "docker" \
                "https://download.docker.com/linux/debian/gpg" \
                "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
 
-echo -e "${YELLOW}Installing Docker Engine...${ENDCOLOR}"
+echo -e "${BIYELLOW}Installing Docker Engine...${NC}"
 apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 if ! getent group "docker" &>/dev/null; then
   groupadd docker
@@ -26,10 +26,10 @@ usermod -aG docker "$SUDO_USER"
 systemctl enable docker.service
 systemctl enable containerd.service
 echo
-echo -e "${CYAN}$(docker version)\n$(docker compose version)${ENDCOLOR}"
-echo -e "${YELLOW}Docker Engine installed.${ENDCOLOR}"
+echo -e "${ICYAN}$(docker version)\n$(docker compose version)${NC}"
+echo -e "${BIYELLOW}Docker Engine installed.${NC}"
 echo
-echo -e "${YELLOW}Installing Docker Desktop...${ENDCOLOR}"
+echo -e "${BIYELLOW}Installing Docker Desktop...${NC}"
 apt install -y gnome-terminal
 ARCH=$(dpkg --print-architecture)
 DEB_PKG="$(mktemp).deb"
@@ -50,4 +50,4 @@ if [ ! -e /usr/local/bin/com.docker.cli ]; then
   ln -s /usr/bin/docker /usr/local/bin/com.docker.cli
 fi
 
-echo -e "${YELLOW}Docker Desktop installed.${ENDCOLOR}"
+echo -e "${BIYELLOW}Docker Desktop installed.${NC}"

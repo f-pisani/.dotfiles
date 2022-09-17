@@ -14,7 +14,8 @@ source "${DIR}/must_be_run_as_root"
 for FILE in $(ls "${DIR}/post_install.d/")
 do
   POST_INSTALL_SCRIPT="${DIR}/post_install.d/${FILE}"
-  echo -e "${YELLOW}Executing ${POST_INSTALL_SCRIPT} ...${ENDCOLOR}"
+  echo -e "${BIPURPLE}Executing ${POST_INSTALL_SCRIPT} ...${NC}"
   . "${POST_INSTALL_SCRIPT}"
-  echo -e "${YELLOW}${POST_INSTALL_SCRIPT} executed.${ENDCOLOR}"
+  echo -e "${BIPURPLE}${POST_INSTALL_SCRIPT} executed.${NC}"
+  echo
 done

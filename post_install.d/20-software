@@ -11,13 +11,13 @@ DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
 source "${DIR}/must_be_run_as_root"
 source "${DIR}/add_apt_source"
 
-echo -e "${GREEN}$(figlet "Software")${ENDCOLOR}"
+echo -e "${BIGREEN}$(figlet "Software")${NC}"
 
 add_apt_source "google-chrome" \
                "https://dl-ssl.google.com/linux/linux_signing_key.pub" \
                "deb [arch=$(dpkg --print-architecture)] http://dl.google.com/linux/chrome/deb/ stable main"
 
-echo -e "${YELLOW}Installing software...${ENDCOLOR}"
+echo -e "${BIYELLOW}Installing software...${NC}"
 apt install -y snapd google-chrome-stable
 echo
 snap install core 
@@ -40,4 +40,4 @@ snap install whatsdesk
 snap install thunderbird
 echo
 snap list
-echo -e "${YELLOW}Software installed.${ENDCOLOR}"
+echo -e "${BIYELLOW}Software installed.${NC}"

@@ -11,27 +11,27 @@ DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
 source "${DIR}/must_be_run_as_root"
 source "${DIR}/add_apt_source"
 
-echo -e "${GREEN}$(figlet "PHP")${ENDCOLOR}"
+echo -e "${BIGREEN}$(figlet "PHP")${NC}"
 
 add_apt_source "php" \
                "https://packages.sury.org/php/apt.gpg" \
                "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/php.gpg]  https://packages.sury.org/php/ $(lsb_release -cs) main"
 
-echo -e "${YELLOW}Installing PHP 7.4 ...${ENDCOLOR}"
+echo -e "${BIYELLOW}Installing PHP 7.4 ...${NC}"
 apt install -y php7.4-cli php7.4-common php7.4-mysql php7.4-xml php7.4-xmlrpc \
                php7.4-curl php7.4-gd php7.4-imagick php7.4-imap php7.4-mbstring \
                php7.4-opcache php7.4-soap php7.4-zip php7.4-redis php7.4-intl
-echo -e "${CYAN}$(/usr/bin/php7.4 -v)${ENDCOLOR}"
-echo -e "${YELLOW}PHP 7.4 installed.${ENDCOLOR}"
+echo -e "${ICYAN}$(/usr/bin/php7.4 -v)${NC}"
+echo -e "${BIYELLOW}PHP 7.4 installed.${NC}"
 echo
-echo -e "${YELLOW}Installing PHP 8.1 ...${ENDCOLOR}"
+echo -e "${BIYELLOW}Installing PHP 8.1 ...${NC}"
 apt install -y php8.1-cli php8.1-common php8.1-mysql php8.1-xml php8.1-xmlrpc \
                php8.1-curl php8.1-gd php8.1-imagick php8.1-imap php8.1-mbstring \
                php8.1-opcache php8.1-soap php8.1-zip php8.1-redis php8.1-intl
-echo -e "${CYAN}$(/usr/bin/php8.1 -v)${ENDCOLOR}"
-echo -e "${YELLOW}PHP 8.1 installed.${ENDCOLOR}"
+echo -e "${ICYAN}$(/usr/bin/php8.1 -v)${NC}"
+echo -e "${BIYELLOW}PHP 8.1 installed.${NC}"
 echo
-echo -e "${YELLOW}Installing composer ...${ENDCOLOR}"
+echo -e "${BIYELLOW}Installing composer ...${NC}"
 wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet && mv ./composer.phar /usr/local/bin/composer
-echo -e "${CYAN}$(su "$SUDO_USER" -c "composer --version")${ENDCOLOR}"
-echo -e "${YELLOW}Composer installed.${ENDCOLOR}"
+echo -e "${ICYAN}$(su "$SUDO_USER" -c "composer --version")${NC}"
+echo -e "${BIYELLOW}Composer installed.${NC}"

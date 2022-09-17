@@ -10,8 +10,8 @@ set -o errexit # Exit immediately if a command exits with a non-zero status.
 DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
 source "${DIR}/must_be_run_as_root"
 
-echo -e "${GREEN}$(figlet "Drivers")${ENDCOLOR}"
+echo -e "${BIGREEN}$(figlet "Drivers")${NC}"
 
-echo -e "${YELLOW}Installing drivers...${ENDCOLOR}"
+echo -e "${BIYELLOW}Installing drivers...${NC}"
 apt install -y firmware-linux firmware-linux-free firmware-misc-nonfree firmware-iwlwifi
-echo -e "${YELLOW}Drivers installed.${ENDCOLOR}"
+echo -e "${BIYELLOW}Drivers installed.${NC}"
