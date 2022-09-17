@@ -10,6 +10,6 @@ set -o errexit # Exit immediately if a command exits with a non-zero status.
 DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
 source "${DIR}/must_be_run_as_root"
 
-apt install -y wget curl git nmap inetutils-ping ca-certificates gnupg gnupg2 \
+apt install -y wget curl git gitk nmap inetutils-ping ca-certificates gnupg gnupg2 \
                gnupg-agent gnupg-curl scdaemon pcscd lsb-release htop figlet \
                neofetch vim apache2-utils rsync ftp lynis
