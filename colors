@@ -9,7 +9,7 @@ GREEN="\e[32m"
 YELLOW="\e[33m"
 BLUE="\e[34m"
 PURPLE="\e[35m"
-CYAN="\e[36m"
+CYAN="\e[33m"
 WHITE="\e[37m"
 
 # Bold
