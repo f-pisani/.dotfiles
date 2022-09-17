@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# The return value of a pipeline is the status of
+# the last command to exit with a non-zero status,
+# or zero if no command exited with a non-zero status
+set -o pipefail
+set -o nounset # Treat unset variables as an error when substituting.
+set -o errexit # Exit immediately if a command exits with a non-zero status.
+
+DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
+source "${DIR}/lib/must_be_run_as_root"
+
+# post_install.d
+# shellcheck disable=SC2045
+for FILE in $(ls "${DIR}/post_install.d/"); do
+  POST_INSTALL_SCRIPT="${DIR}/post_install.d/${FILE}"
+  echo -e "${BIPURPLE}Executing ${POST_INSTALL_SCRIPT} ...${NC}"
+  source "${POST_INSTALL_SCRIPT}"
+  echo -e "${BIPURPLE}${POST_INSTALL_SCRIPT} executed.${NC}"
+  echo
+done
+
+# .dotfiles
+function install_dotfile() {
+  local type="$1"
+  local src="$2"
+  local dst="$3"
+
+  case "${type}" in
+    "copy")
+      if [ ! -e "${dst}" ]; then
+        cp "${src}" "${dst}"
+        echo "cp: ${src} -> ${dst}"
+      fi
+      ;;
+
+    "link")
+      ln -sb "${src}" "${dst}"
+      echo "ln: ${src} -> ${dst}"
+      ;;
+  esac
+}
+
+function install_dotfiles() {
+    local dir="$1"
+    install_dotfile "link" "${dir}/home/.bashrc.symlink" ~/.bashrc
+    install_dotfile "link" "${dir}/home/.bash_aliases.symlink" ~/.bash_aliases
+    install_dotfile "link" "${dir}/git/.gitignore.symlink" ~/.gitignore
+    install_dotfile "copy" "${dir}/git/.gitconfig" ~/.gitconfig
+}
+
+echo -e "${BIPURPLE}Installing .dotfiles...${NC}"
+su "$SUDO_USER" -c "$(typeset -f install_dotfiles install_dotfile); install_dotfiles ${DIR}"
+echo -e "${BIPURPLE}.dotfiles installed.${NC}"

@@ -1,3 +1,4 @@
+#!/bin/bash
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -56,13 +57,63 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-if [ "$color_prompt" = yes ]; then
-#     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    PS1="
-    \[\e[31;1m\]┌───=[ \[\e[39;1m\]\u\[\e[31;1m\] :: \[\e[33;1m\]\h\[\e[31;1m\] ]-( \[\e[39;1m\]\j\[\e[31;1m\] )-[ \[\e[39;1m\]\w\[\e[31;1m\] ]$PS1
-    \[\e[31;1m\]└──( \[\e[0m\]"
+git_current_head () {
+    git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD
+}
+
+git_dirty_mark () {
+    [[ -n $(git status -s | head -c 1) ]] && echo '*'
+}
+
+
+git_special_indicator() {
+    local dir="$(git rev-parse --git-dir 2>/dev/null)"
+    if [ ! -n "${dir}" ]; then
+        exit 0
+    fi
+
+    local special_indicator=""
+    if [ -d "${dir}/rebase-apply" ]; then
+        if [ -f "${dir}/rebase-apply/rebasing" ]; then
+            special_indicator="|REBASE"
+        elif [ -f "${dir}/rebase-apply/applying" ]; then
+            special_indicator="|AM"
+        else
+            special_indicator="|AM/REBASE"
+        fi
+    elif [ -f "${dir}/rebase-merge/interactive" ]; then
+        special_indicator="|REBASE-i"
+    elif [ -d "${dir}/rebase-merge" ]; then
+        special_indicator="|REBASE-m"
+    elif [ -f "${dir}/MERGE_HEAD" ]; then
+        special_indicator="|MERGING"
+    elif [ -f "${dir}/BISECT_LOG" ]; then
+        special_indicator="|BISECTING"
+    elif [ -f "${dir}/CHERRY_PICK_HEAD" ]; then
+        special_indicator="|CHERRY-PICKING"
+    fi
+
+    echo "${special_indicator}"
+}
+
+show_git_prompt () {
+    git branch 2>/dev/null 1>&2 && echo -e "-(\e[34m$(git_current_head)$(git_dirty_mark)$(git_special_indicator)\e[31m)"
+}
+
+if [[ -n $(type -t git) ]] ; then
+  PS1="\$(show_git_prompt)"
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+  PS1=
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1="
+\[\e[31m\]┌───[${debian_chroot:+($debian_chroot)}\t]-[\[\e[32m\]\u\[\e[31m\]@\[\e[33m\]\H\[\e[31m\]]-[\[\e[0m\]\w\[\e[31m\]]$PS1
+\[\e[31m\]└─\$\[\e[0m\] "
+else
+    PS1="
+┌───[\t]-[${debian_chroot:+($debian_chroot)}\u@\H]-[\w]
+└─\$ "
 fi
 unset color_prompt force_color_prompt
 
@@ -110,6 +161,10 @@ if ! shopt -oq posix; then
   fi
 fi
 
-export GPG_TTY="$(tty)"
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-gpgconf --launch gpg-agent
+# Auto-start gpg-agent
+if [[ -n $(type -t gpgconf) ]] ; then
+    export GPG_TTY="$(tty)"
+    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    gpgconf --launch gpg-agent
+fi
+

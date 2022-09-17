@@ -8,8 +8,8 @@ set -o nounset # Treat unset variables as an error when substituting.
 set -o errexit # Exit immediately if a command exits with a non-zero status.
 
 DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
-source "${DIR}/must_be_run_as_root"
-source "${DIR}/add_apt_source"
+source "${DIR}/lib/must_be_run_as_root"
+source "${DIR}/lib/add_apt_source"
 
 echo -e "${BIGREEN}$(figlet "PHP")${NC}"
 

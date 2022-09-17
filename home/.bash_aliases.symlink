@@ -1,3 +1,5 @@
+#!/bin/bash
+
 alias ..='cd ..'
 alias c='clear'
 alias ll='ls -lha'

@@ -8,9 +8,9 @@ set -o nounset # Treat unset variables as an error when substituting.
 set -o errexit # Exit immediately if a command exits with a non-zero status.
 
 DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
-source "$DIR/colors"
+source "$DIR/lib/colors"
 
-if [ "$(id -u)" != "0" ]; then
-   echo -e "${IRED}This script must be run as root.${NC}" 1>&2
+if [ "$(id -u)" == "0" ]; then
+   echo -e "${IRED}This script must not be run as root.${NC}" 1>&2
    exit 1
 fi
