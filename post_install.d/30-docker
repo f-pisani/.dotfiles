@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# The return value of a pipeline is the status of
+# the last command to exit with a non-zero status,
+# or zero if no command exited with a non-zero status
+set -o pipefail
+set -o nounset # Treat unset variables as an error when substituting.
+set -o errexit # Exit immediately if a command exits with a non-zero status.
+
+DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
+source "${DIR}/must_be_run_as_root"
+source "${DIR}/add_apt_source"
+
+echo -e "${GREEN}$(figlet "Docker")${ENDCOLOR}"
+
+add_apt_source "docker" \
+               "https://download.docker.com/linux/debian/gpg" \
+               "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+
+echo -e "${YELLOW}Installing Docker Engine...${ENDCOLOR}"
+apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+if ! getent group "docker" &>/dev/null; then
+  groupadd docker
+fi
+usermod -aG docker "$SUDO_USER"
+systemctl enable docker.service
+systemctl enable containerd.service
+echo
+echo -e "${CYAN}$(docker version)\n$(docker compose version)${ENDCOLOR}"
+echo -e "${YELLOW}Docker Engine installed.${ENDCOLOR}"
+echo
+echo -e "${YELLOW}Installing Docker Desktop...${ENDCOLOR}"
+apt install -y gnome-terminal
+ARCH=$(dpkg --print-architecture)
+DEB_PKG="$(mktemp).deb"
+curl -fsS -o "${DEB_PKG}" "https://desktop.docker.com/linux/main/${ARCH}/docker-desktop-4.11.0-${ARCH}.deb"
+
+# package installation fails if the symb link already exists
+# should not be required once they fix their stuff.
+if [ -e /usr/local/bin/com.docker.cli ]; then
+  rm /usr/local/bin/com.docker.cli
+fi
+
+apt install -y "${DEB_PKG}" && rm "${DEB_PKG}"
+
+# if for some reason in the future the package
+# stop creating the symb link, we restore it.
+# Again, it should not be required.
+if [ ! -e /usr/local/bin/com.docker.cli ]; then
+  ln -s /usr/bin/docker /usr/local/bin/com.docker.cli
+fi
+
+echo -e "${YELLOW}Docker Desktop installed.${ENDCOLOR}"

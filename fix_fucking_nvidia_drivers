@@ -1,0 +1,23 @@
+#!/usr/bin/bash
+
+# The return value of a pipeline is the status of
+# the last command to exit with a non-zero status,
+# or zero if no command exited with a non-zero status
+set -o pipefail
+set -o nounset # Treat unset variables as an error when substituting.
+set -o errexit # Exit immediately if a command exits with a non-zero status.
+
+DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
+source "$DIR/must_be_run_as_root"
+
+# Does not even try. Simply remove NVIDIA drivers.
+# Maybe it could get easier in the future, but for
+# now it's a mess. Not wasting more time on this.
+echo -e "${YELLOW}Cleaning NVIDIA drivers...${ENDCOLOR}"
+apt purge -y nvidia*
+apt autoremove -y
+if [ -f /etc/X11/xorg.conf ]; then
+  cp /etc/X11/xorg.conf /etc/X11/xorg.conf.bak
+  rm /etc/X11/xorg.conf
+fi
+echo -e "${YELLOW}NVIDIA drivers cleaned.${ENDCOLOR}"
