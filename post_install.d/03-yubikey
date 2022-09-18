@@ -23,5 +23,5 @@ echo -e "${BIYELLOW}YubiKey tools installed.${NC}"
 if [ ! -d "/home/${SUDO_USER}/.gnupg" ]; then
     mkdir -p "/home/${SUDO_USER}/.gnupg"
 fi
-echo -e "enable-ssh-support\npinentry-program /usr/bin/pinentry-curses" > "/home/${SUDO_USER}/.gnupg/gpg-agent.conf"
+echo -e "enable-ssh-support\npinentry-program /usr/bin/pinentry-x11" > "/home/${SUDO_USER}/.gnupg/gpg-agent.conf"
 chown -R "${SUDO_USER}":"${SUDO_USER}" "/home/${SUDO_USER}/.gnupg"
