@@ -41,3 +41,7 @@ snap install thunderbird
 echo
 snap list
 echo -e "${BIYELLOW}Software installed.${NC}"
+
+# Inotify Watches Limit (see: https://youtrack.jetbrains.com/articles/IDEA-A-2/Inotify-Watches-Limit-Linux)
+echo "fs.inotify.max_user_watches = 524288" > "/etc/sysctl.d/idea.conf"
+sysctl -p --system

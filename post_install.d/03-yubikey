@@ -7,7 +7,7 @@ set -o pipefail
 set -o nounset # Treat unset variables as an error when substituting.
 set -o errexit # Exit immediately if a command exits with a non-zero status.
 
-DIR=$(dirname "$0")
+DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
 source "$DIR/lib/must_be_run_as_root"
 
 echo -e "${BIGREEN}$(figlet "Yubikey")${NC}"
@@ -15,7 +15,13 @@ echo -e "${BIGREEN}$(figlet "Yubikey")${NC}"
 echo -e "${BIYELLOW}Installing YubiKey tools...${NC}"
 apt -y install wget gnupg2 gnupg-agent dirmngr cryptsetup scdaemon pcscd \
                secure-delete hopenpgp-tools yubikey-personalization \
-               python3-pip python3-pyscard
+               python3-pip python3-pyscard pinentry-gnome3
 pip3 install PyOpenSSL yubikey-manager
 service pcscd start
 echo -e "${BIYELLOW}YubiKey tools installed.${NC}"
+
+if [ ! -d "/home/${SUDO_USER}/.gnupg" ]; then
+    mkdir -p "/home/${SUDO_USER}/.gnupg"
+fi
+echo -e "enable-ssh-support\npinentry-program /usr/bin/pinentry-curses" > "/home/${SUDO_USER}/.gnupg/gpg-agent.conf"
+chown -R "${SUDO_USER}":"${SUDO_USER}" "/home/${SUDO_USER}/.gnupg"
