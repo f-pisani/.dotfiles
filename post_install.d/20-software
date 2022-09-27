@@ -38,6 +38,7 @@ snap install mattermost-desktop
 snap install discord 
 snap install whatsdesk 
 snap install thunderbird
+snap install --channel=edge steam
 echo
 snap list
 echo -e "${BIYELLOW}Software installed.${NC}"
