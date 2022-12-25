@@ -7,47 +7,45 @@ set -o pipefail
 set -o nounset # Treat unset variables as an error when substituting.
 set -o errexit # Exit immediately if a command exits with a non-zero status.
 
-if grep -qi microsoft /proc/version; then
-  echo -e "${BIYELLOW}Skipping software installation WSL detected.${NC}"
-  exit 0
-fi
-
 DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
 source "${DIR}/lib/must_be_run_as_root"
-source "${DIR}/lib/add_apt_source"
 
 echo -e "${BIGREEN}$(figlet "Software")${NC}"
 
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-apt install -y ./google-chrome-stable_current_amd64.deb
-rm google-chrome-stable_current_amd64.deb
+if [[ grep -qi microsoft /proc/version ]]; then
+  echo -e "${BIYELLOW}Skipping software installation WSL detected.${NC}"
+else 
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  apt install -y ./google-chrome-stable_current_amd64.deb
+  rm google-chrome-stable_current_amd64.deb
 
-echo -e "${BIYELLOW}Installing software...${NC}"
-apt install -y snapd
-echo
-snap install core 
-snap install firefox 
-snap install bitwarden 
-snap install discord 
-snap install --classic phpstorm 
-snap install --classic pycharm-professional
-snap install --channel=edge shellcheck
-snap install --classic clion 
-snap install --classic goland 
-snap install --classic datagrip 
-snap install postman 
-snap install vlc 
-snap install slack 
-snap install skype 
-snap install mattermost-desktop 
-snap install discord 
-snap install whatsdesk 
-snap install thunderbird
-snap install --channel=edge steam
-echo
-snap list
-echo -e "${BIYELLOW}Software installed.${NC}"
+  echo -e "${BIYELLOW}Installing software...${NC}"
+  apt install -y snapd
+  echo
+  snap install core 
+  snap install firefox 
+  snap install bitwarden 
+  snap install discord 
+  snap install --classic phpstorm 
+  snap install --classic pycharm-professional
+  snap install --channel=edge shellcheck
+  snap install --classic clion 
+  snap install --classic goland 
+  snap install --classic datagrip 
+  snap install postman 
+  snap install vlc 
+  snap install slack 
+  snap install skype 
+  snap install mattermost-desktop 
+  snap install discord 
+  snap install whatsdesk 
+  snap install thunderbird
+  snap install --channel=edge steam
+  echo
+  snap list
+  echo -e "${BIYELLOW}Software installed.${NC}"
 
-# Inotify Watches Limit (see: https://youtrack.jetbrains.com/articles/IDEA-A-2/Inotify-Watches-Limit-Linux)
-echo "fs.inotify.max_user_watches = 524288" > "/etc/sysctl.d/idea.conf"
-sysctl -p --system
+  # Inotify Watches Limit (see: https://youtrack.jetbrains.com/articles/IDEA-A-2/Inotify-Watches-Limit-Linux)
+  echo "fs.inotify.max_user_watches = 524288" > "/etc/sysctl.d/idea.conf"
+  sysctl -p --system
+fi
