@@ -28,26 +28,3 @@ systemctl enable containerd.service
 echo
 echo -e "${ICYAN}$(docker version)\n$(docker compose version)${NC}"
 echo -e "${BIYELLOW}Docker Engine installed.${NC}"
-echo
-echo -e "${BIYELLOW}Installing Docker Desktop...${NC}"
-apt install -y gnome-terminal
-ARCH=$(dpkg --print-architecture)
-DEB_PKG="$(mktemp).deb"
-curl -fsS -o "${DEB_PKG}" "https://desktop.docker.com/linux/main/${ARCH}/docker-desktop-4.11.0-${ARCH}.deb"
-
-# package installation fails if the symb link already exists
-# should not be required once they fix their stuff.
-if [ -e /usr/local/bin/com.docker.cli ]; then
-  rm /usr/local/bin/com.docker.cli
-fi
-
-apt install -y "${DEB_PKG}" && rm "${DEB_PKG}"
-
-# if for some reason in the future the package
-# stop creating the symb link, we restore it.
-# Again, it should not be required.
-if [ ! -e /usr/local/bin/com.docker.cli ]; then
-  ln -s /usr/bin/docker /usr/local/bin/com.docker.cli
-fi
-
-echo -e "${BIYELLOW}Docker Desktop installed.${NC}"
