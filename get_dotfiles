@@ -25,7 +25,8 @@ if [ ! -d "${DOTFILES_DIR}" ]; then
     cd "${DOTFILES_DIR}"
     git remote remove origin
     git remote add origin git@github.com:f-pisani/.dotfiles.git
-    chown -R "${SUDO_USER}":"${SUDO_USER}" "${DOTFILES_DIR}"
 fi
 
 bash "${DOTFILES_DIR}/install"
+chown -R "${SUDO_USER}":"${SUDO_USER}" "${DOTFILES_DIR}"
+apt update && apt upgrade -y
