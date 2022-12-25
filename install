@@ -7,6 +7,7 @@ set -o pipefail
 set -o nounset # Treat unset variables as an error when substituting.
 set -o errexit # Exit immediately if a command exits with a non-zero status.
 
+export DEBIAN_FRONTEND=noninteractive
 DIR=$([[ $(realpath "$0") =~ (.+/.dotfiles) ]] && echo "${BASH_REMATCH[1]}")
 source "${DIR}/lib/must_be_run_as_root"
 
