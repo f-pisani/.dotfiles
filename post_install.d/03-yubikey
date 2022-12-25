@@ -13,7 +13,7 @@ source "$DIR/lib/must_be_run_as_root"
 echo -e "${BIGREEN}$(figlet "Yubikey")${NC}"
 
 echo -e "${BIYELLOW}Installing YubiKey tools...${NC}"
-apt -y install wget gnupg2 gnupg-agent dirmngr cryptsetup scdaemon pcscd \
+apt install -y wget gnupg2 gnupg-agent dirmngr cryptsetup scdaemon pcscd \
                secure-delete hopenpgp-tools yubikey-personalization \
                python3-pip python3-pyscard pinentry-gnome3
 pip3 install PyOpenSSL yubikey-manager
