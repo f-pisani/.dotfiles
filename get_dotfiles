@@ -24,7 +24,7 @@ if [ ! -d "${DOTFILES_DIR}" ]; then
     git clone https://github.com/f-pisani/.dotfiles.git "${DOTFILES_DIR}"
     cd "${DOTFILES_DIR}"
     git remote remove origin
-    git remote add git@github.com:f-pisani/.dotfiles.git
+    git remote add origin git@github.com:f-pisani/.dotfiles.git
     chown -R "${SUDO_USER}":"${SUDO_USER}" "${DOTFILES_DIR}"
 fi
 
