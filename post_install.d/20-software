@@ -12,7 +12,7 @@ source "${DIR}/lib/must_be_run_as_root"
 
 echo -e "${BIGREEN}$(figlet "Software")${NC}"
 
-if [[ grep -qi microsoft /proc/version ]]; then
+if grep -qi microsoft /proc/version; then
   echo -e "${BIYELLOW}Skipping software installation WSL detected.${NC}"
 else 
   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
