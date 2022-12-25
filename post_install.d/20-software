@@ -14,11 +14,11 @@ source "${DIR}/lib/add_apt_source"
 echo -e "${BIGREEN}$(figlet "Software")${NC}"
 
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-apt install ./google-chrome-stable_current_amd64.deb
+apt install -y ./google-chrome-stable_current_amd64.deb
 rm google-chrome-stable_current_amd64.deb
 
 echo -e "${BIYELLOW}Installing software...${NC}"
-apt install -y snapd google-chrome-stable
+apt install -y snapd
 echo
 snap install core 
 snap install firefox 
