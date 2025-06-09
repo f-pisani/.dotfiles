@@ -1,9 +1,6 @@
 [user]
-        name =
-        email =
-        signingkey =
-[commit]
-        gpgsign = true
+        name = Florian PISANI
+        email = 42639605+f-pisani@users.noreply.github.com
 [core]
         excludesfile = ~/.gitignore
         editor = vim
@@ -11,7 +8,3 @@
         defaultBranch = main
 [pull]
         rebase = false
-[tag]
-        gpgSign = true
-[push]
-        gpgSign = if-asked
